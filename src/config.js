@@ -7,9 +7,9 @@
       domain: ".prod.finderit.com"
     },
     prodduction: {
-      srcLp: "/var/www/landingpages/wordpress",
+      srcLp: "/var/www/catalog/wordpress",
       destLp: "/var/www/clients",
-      domain: ".prod.finderit.com"
+      domain: ".cl.finderit.com"
     }
   };
 

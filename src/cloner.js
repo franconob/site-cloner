@@ -26,7 +26,7 @@
     Cloner.prototype.clone = function(callback) {
       var _this = this;
       this.callback = callback;
-      this.dest = "" + this.destDir + "/" + this.domain;
+      this.dest = "" + this.destDir + "/" + this.domain + "/htdocs";
       return mkdirp(this.dest, function(err) {
         if (err) {
           throw err;
