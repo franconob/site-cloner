@@ -98,7 +98,7 @@
     };
 
     Cloner.prototype._mysqlCmd = function(db, file, callback) {
-      return exec("mysql -uroot -pechesortufc " + db + " < " + file, callback);
+      return exec("mysql -u" + this.config.db.user + " -p" + this.config.db.password + " " + db + " < " + file, callback);
     };
 
     return Cloner;

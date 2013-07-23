@@ -59,7 +59,7 @@ class Cloner
         callback()
 
   _mysqlCmd: (db, file, callback) ->
-    exec "mysql -uroot -pechesortufc #{db} < #{file}", callback
+    exec "mysql -u#{@config.db.user} -p#{@config.db.password} #{db} < #{file}", callback
 
 module.exports = Cloner
 
