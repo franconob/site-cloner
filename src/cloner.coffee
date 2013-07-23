@@ -12,7 +12,7 @@ class Cloner
 
   clone: (@callback) ->
 
-    @dest = "#{@destDir}/#{@domain}"
+    @dest = "#{@destDir}/#{@domain}/htdocs"
 
     mkdirp @dest, (err) =>
       throw err if err
