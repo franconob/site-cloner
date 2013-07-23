@@ -6,7 +6,7 @@ module.exports =
     db:
       user: 'root'
       password: 'echesortufc'
-  prodduction:
+  production:
     srcLp: "/var/www/catalog/wordpress"
     destLp: "/var/www/clients"
     domain: ".cl.finderit.com"
