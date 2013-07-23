@@ -14,7 +14,7 @@
     srcDir = config.srcLp;
     destDir = config.destLp;
     data = req.body.data;
-    cloner = new Cloner(data, srcDir, destDir, lp, domain);
+    cloner = new Cloner(data, srcDir, destDir, lp, domain, config);
     try {
       return cloner.clone(function() {
         var status;

@@ -5,7 +5,7 @@ mysql = require 'mysql2'
 exec = (require 'child_process').exec
 
 class Cloner
-  constructor: (@vars, @srcDir, @destDir, @lp, @domain) ->
+  constructor: (@vars, @srcDir, @destDir, @lp, @domain, @config) ->
 
     @baseSQL = "db.sql"
     @dbCompiled = null
@@ -27,8 +27,8 @@ class Cloner
   _connect: (options = {}) ->
 
     config =
-      user: 'root'
-      password: 'echesortufc'
+      user: @config.db.user
+      password: @config.db.password
       multipleStatements: true
 
     @conn = mysql.createConnection config

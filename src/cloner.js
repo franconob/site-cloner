@@ -13,12 +13,13 @@
   exec = (require('child_process')).exec;
 
   Cloner = (function() {
-    function Cloner(vars, srcDir, destDir, lp, domain) {
+    function Cloner(vars, srcDir, destDir, lp, domain, config) {
       this.vars = vars;
       this.srcDir = srcDir;
       this.destDir = destDir;
       this.lp = lp;
       this.domain = domain;
+      this.config = config;
       this.baseSQL = "db.sql";
       this.dbCompiled = null;
     }
@@ -50,8 +51,8 @@
         options = {};
       }
       config = {
-        user: 'root',
-        password: 'echesortufc',
+        user: this.config.db.user,
+        password: this.config.db.password,
         multipleStatements: true
       };
       return this.conn = mysql.createConnection(config);

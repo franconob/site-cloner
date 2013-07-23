@@ -12,7 +12,7 @@ exports.clone = (req, res) ->
 
   data = req.body.data
 
-  cloner = new Cloner(data, srcDir, destDir, lp, domain)
+  cloner = new Cloner(data, srcDir, destDir, lp, domain, config)
 
   try
     cloner.clone ->
