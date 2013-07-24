@@ -5,24 +5,25 @@ mysql = require 'mysql2'
 exec = (require 'child_process').exec
 
 class Cloner
-  constructor: (@vars, @srcDir, @destDir, @lp, @domain, @config) ->
+  constructor: (@vars, @config, @lp, @domain) ->
 
     @baseSQL = "db.sql"
     @dbCompiled = null
 
   clone: (@callback) ->
 
-    @dest = "#{@destDir}/#{@domain}/htdocs"
+    @dest = "#{@config.destDir}/#{@domain}/htdocs"
 
     mkdirp @dest, (err) =>
       throw err if err
 
-      fs.copy @srcDir, @dest, (err) =>
+      fs.copy @config.srcDir, @dest, (err) =>
         throw err if err
 
         @_compileDb =>
           @_createDb =>
-            @callback()
+            @_compileConfig =>
+              @callback()
 
   _connect: (options = {}) ->
 
@@ -43,18 +44,34 @@ class Cloner
 
       @_mysqlCmd dbName, "#{@dest}/#{@baseSQL}", (err, stdout, stderr) =>
         throw err if err
-        console.log stdout
-        console.log stderr
 
         @conn.end (err) ->
           callback()
 
   _compileDb: (callback) ->
-    fs.readFile "#{@srcDir}/#{@baseSQL}", encoding: 'utf8', (err, data) =>
+    fs.readFile "#{@dest}/#{@baseSQL}", encoding: 'utf8', (err, data) =>
       template = hogan.compile data
       @dbCompiled = template.render @vars
 
       fs.writeFile "#{@dest}/#{@baseSQL}", @dbCompiled, (err) =>
+        throw err if err
+        callback()
+
+  _compileConfig: (callback) ->
+    config = "#{@dest}/#{@config.all.configFile}"
+
+    fs.readFile "#{@config.srcDir}/#{@config.all.configFile}", encoding: 'utf8', (err, data) =>
+      throw err if err
+      template = hogan.compile data
+
+      # TODO: configurar las variables del archivo de conf en config.coffee
+
+      vars =
+        dbUser: @config.db.user
+        dbName: "lp_#{@domain}"
+        dbPassword: @config.db.password
+
+      fs.writeFile config, (template.render vars), (err) =>
         throw err if err
         callback()
 

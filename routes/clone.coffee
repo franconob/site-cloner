@@ -5,18 +5,17 @@ exports.clone = (req, res) ->
   lp = req.params.landingPage
   domain = req.params.domain
 
-  config = config[req.app.get 'env']
+  config_env = config[req.app.get 'env']
 
-  srcDir = config.srcLp
-  destDir = config.destLp
+  config_env['all'] = config['all']
 
   data = req.body.data
 
-  cloner = new Cloner(data, srcDir, destDir, lp, domain, config)
+  cloner = new Cloner(data, config_env, lp, domain)
 
   try
     cloner.clone ->
       status = 'success'
-      res.json status: status, domain: "#{domain}#{config.domain}"
+      res.json status: status, domain: "#{domain}#{config_env.domain}"
   catch error
       res.json status: "error"

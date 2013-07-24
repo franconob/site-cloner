@@ -13,13 +13,11 @@
   exec = (require('child_process')).exec;
 
   Cloner = (function() {
-    function Cloner(vars, srcDir, destDir, lp, domain, config) {
+    function Cloner(vars, config, lp, domain) {
       this.vars = vars;
-      this.srcDir = srcDir;
-      this.destDir = destDir;
+      this.config = config;
       this.lp = lp;
       this.domain = domain;
-      this.config = config;
       this.baseSQL = "db.sql";
       this.dbCompiled = null;
     }
@@ -27,18 +25,20 @@
     Cloner.prototype.clone = function(callback) {
       var _this = this;
       this.callback = callback;
-      this.dest = "" + this.destDir + "/" + this.domain + "/htdocs";
+      this.dest = "" + this.config.destDir + "/" + this.domain + "/htdocs";
       return mkdirp(this.dest, function(err) {
         if (err) {
           throw err;
         }
-        return fs.copy(_this.srcDir, _this.dest, function(err) {
+        return fs.copy(_this.config.srcDir, _this.dest, function(err) {
           if (err) {
             throw err;
           }
           return _this._compileDb(function() {
             return _this._createDb(function() {
-              return _this.callback();
+              return _this._compileConfig(function() {
+                return _this.callback();
+              });
             });
           });
         });
@@ -71,8 +71,6 @@
           if (err) {
             throw err;
           }
-          console.log(stdout);
-          console.log(stderr);
           return _this.conn.end(function(err) {
             return callback();
           });
@@ -82,13 +80,39 @@
 
     Cloner.prototype._compileDb = function(callback) {
       var _this = this;
-      return fs.readFile("" + this.srcDir + "/" + this.baseSQL, {
+      return fs.readFile("" + this.dest + "/" + this.baseSQL, {
         encoding: 'utf8'
       }, function(err, data) {
         var template;
         template = hogan.compile(data);
         _this.dbCompiled = template.render(_this.vars);
         return fs.writeFile("" + _this.dest + "/" + _this.baseSQL, _this.dbCompiled, function(err) {
+          if (err) {
+            throw err;
+          }
+          return callback();
+        });
+      });
+    };
+
+    Cloner.prototype._compileConfig = function(callback) {
+      var config,
+        _this = this;
+      config = "" + this.dest + "/" + this.config.all.configFile;
+      return fs.readFile("" + this.config.srcDir + "/" + this.config.all.configFile, {
+        encoding: 'utf8'
+      }, function(err, data) {
+        var template, vars;
+        if (err) {
+          throw err;
+        }
+        template = hogan.compile(data);
+        vars = {
+          dbUser: _this.config.db.user,
+          dbName: "lp_" + _this.domain,
+          dbPassword: _this.config.db.password
+        };
+        return fs.writeFile(config, template.render(vars), function(err) {
           if (err) {
             throw err;
           }
