@@ -7,28 +7,29 @@
   config = require('../src/config');
 
   exports.clone = function(req, res) {
-    var cloner, config_env, data, domain, error, lp;
+    var cloner, config_env, data, domain, lp;
     lp = req.params.landingPage;
     domain = req.params.domain;
     config_env = config[req.app.get('env')];
     config_env['all'] = config['all'];
     data = req.body.data;
     cloner = new Cloner(data, config_env, lp, domain);
-    try {
-      return cloner.clone(function() {
-        var status;
-        status = 'success';
-        return res.json({
-          status: status,
-          domain: "" + domain + config_env.domain
-        });
-      });
-    } catch (_error) {
-      error = _error;
+    cloner.clone();
+    cloner.on('success', function(domain) {
       return res.json({
-        status: "error"
+        status: 'success',
+        domain: "" + domain + config_env.domain
       });
-    }
+    });
+    return cloner.on('error', function(err, type, args) {
+      return res.json({
+        status: 'error',
+        error: {
+          code: err.code,
+          message: err.toString()
+        }
+      });
+    });
   };
 
 }).call(this);

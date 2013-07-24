@@ -13,9 +13,16 @@ exports.clone = (req, res) ->
 
   cloner = new Cloner(data, config_env, lp, domain)
 
-  try
-    cloner.clone ->
-      status = 'success'
-      res.json status: status, domain: "#{domain}#{config_env.domain}"
-  catch error
-      res.json status: "error"
+  cloner.clone()
+
+  cloner.on 'success', (domain) ->
+    res.json
+      status: 'success'
+      domain: "#{domain}#{config_env.domain}"
+
+  cloner.on 'error', (err, type, args) ->
+    res.json
+      status: 'error'
+      error:
+        code: err.code
+        message: err.toString()
