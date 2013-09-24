@@ -90,27 +90,35 @@ BaseProduct = (function(_super) {
   };
 
   BaseProduct.prototype.compileDb = function(callback) {
-    var _this = this;
-    return this._mysqlDump(this.origDbName, this._getPath(this.srcDir, "htdocs", BaseProduct.DBFILE), function(err, stdout, stderr) {
+    var dbFile,
+      _this = this;
+    dbFile = this._getPath(this.srcDir, "htdocs", BaseProduct.DBFILE);
+    return this._mysqlDump(this.origDbName, dbFile, function(err, stdout, stderr) {
       if (err) {
         utils.HandleError.call(_this, err, 'compiledb_dump');
       }
-      return fs.readFile(_this._getPath(_this.destDir, BaseProduct.DBFILE), {
-        encoding: 'utf8'
-      }, function(err, data) {
-        var template;
+      return fs.copy(dbFile, _this.destDir, function(err) {
         if (err) {
-          utils.HandleError.call(_this, err, 'compiledb_read');
-          return callback(err);
+          utils.HandleError.call(_this, err, 'compiledb_copydb');
+          callback(err);
         }
-        template = hogan.compile(data);
-        _this.dbCompiled = template.render(_this.vars);
-        fs.writeFile(_this._getPath(_this.destDir, BaseProduct.DBFILE), _this.dbCompiled, function(err) {});
-        if (err) {
-          utils.HandleError.call(_this, err, 'compiledb_write');
+        return fs.readFile(_this._getPath(_this.destDir, BaseProduct.DBFILE), {
+          encoding: 'utf8'
+        }, function(err, data) {
+          var template;
+          if (err) {
+            utils.HandleError.call(_this, err, 'compiledb_read');
+            return callback(err);
+          }
+          template = hogan.compile(data);
+          _this.dbCompiled = template.render(_this.vars);
+          fs.writeFile(_this._getPath(_this.destDir, BaseProduct.DBFILE), _this.dbCompiled, function(err) {});
+          if (err) {
+            utils.HandleError.call(_this, err, 'compiledb_write');
+            return callback(err);
+          }
           return callback(err);
-        }
-        return callback();
+        });
       });
     });
   };

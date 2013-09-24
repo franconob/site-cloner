@@ -66,23 +66,28 @@ class BaseProduct extends EventEmitter
             callback()
 
     compileDb: (callback) ->
-        @_mysqlDump @origDbName, (@_getPath @srcDir, "htdocs", BaseProduct.DBFILE), (err, stdout, stderr) => 
+        dbFile = (@_getPath @srcDir, "htdocs", BaseProduct.DBFILE)
+        @_mysqlDump @origDbName, dbFile, (err, stdout, stderr) => 
             if err 
                 utils.HandleError.call @, err, 'compiledb_dump'
-            fs.readFile (@_getPath @destDir, BaseProduct.DBFILE), encoding: 'utf8', (err, data) =>
+            fs.copy dbFile, @destDir, (err) =>
                 if err
-                    utils.HandleError.call @, err, 'compiledb_read'
-                    return callback err
+                    utils.HandleError.call @, err, 'compiledb_copydb'
+                    callback err
+                fs.readFile (@_getPath @destDir, BaseProduct.DBFILE), encoding: 'utf8', (err, data) =>
+                    if err
+                        utils.HandleError.call @, err, 'compiledb_read'
+                        return callback err
 
-                template = hogan.compile data
-                @dbCompiled = template.render @vars
+                    template = hogan.compile data
+                    @dbCompiled = template.render @vars
 
-                fs.writeFile (@_getPath @destDir, BaseProduct.DBFILE), @dbCompiled, (err) =>
-                if err
-                    utils.HandleError.call @, err, 'compiledb_write'
-                    return callback err
+                    fs.writeFile (@_getPath @destDir, BaseProduct.DBFILE), @dbCompiled, (err) =>
+                    if err
+                        utils.HandleError.call @, err, 'compiledb_write'
+                        return callback err
 
-                callback()
+                    callback(err)
 
     createDb: (callback) ->
         dbName = "lp_#{@subdomain}"
