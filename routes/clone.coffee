@@ -2,6 +2,9 @@ Cloner = (require '../src/cloner')
 config = require '../src/config'
 
 exports.clone = (req, res) ->
+
+  req.connection.setTimeout 10 * 60 * 1000
+
   lp = req.params.landingPage
   domain = req.params.domain
 

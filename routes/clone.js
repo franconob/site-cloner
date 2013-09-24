@@ -7,6 +7,7 @@ config = require('../src/config');
 
 exports.clone = function(req, res) {
   var cloner, data, domain, lp, _config;
+  req.connection.setTimeout(10 * 60 * 1000);
   lp = req.params.landingPage;
   domain = req.params.domain;
   _config = {};

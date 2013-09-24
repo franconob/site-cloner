@@ -87,7 +87,7 @@ class BaseProduct extends EventEmitter
                         utils.HandleError.call @, err, 'compiledb_write'
                         return callback err
 
-                    callback(err)
+                    return callback(err)
 
     createDb: (callback) ->
         dbName = "lp_#{@subdomain}"
