@@ -41,7 +41,7 @@ BaseProduct = (function(_super) {
       destDir: this.destDir,
       baseDir: this.baseDir,
       domain: this.domain,
-      subdmain: this.subdomain,
+      subdomain: this.subdomain,
       dbUser: this.config.env.db.user,
       dbName: this.dbName,
       dbPassword: this.config.env.db.password
