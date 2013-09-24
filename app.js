@@ -3,50 +3,52 @@
   Module dependencies
 */
 
+var app, express, http, path, routes, server;
 
-(function() {
-  var app, express, http, path, routes;
+express = require('express');
 
-  express = require('express');
+routes = require('./routes/clone');
 
-  routes = require('./routes/clone');
+http = require('http');
 
-  http = require('http');
+path = require('path');
 
-  path = require('path');
+app = express();
 
-  app = express();
+app.set('port', process.env.PORT || 3000);
 
-  app.set('port', process.env.PORT || 3000);
+app.set('views', "" + __dirname + "/views");
 
-  app.set('views', "" + __dirname + "/views");
+app.set('view engine', 'hjs');
 
-  app.set('view engine', 'hjs');
+app.use(express.favicon());
 
-  app.use(express.favicon());
+app.use(express.logger('dev'));
 
-  app.use(express.logger('dev'));
+app.use(express.bodyParser());
 
-  app.use(express.bodyParser());
+app.use(express.methodOverride());
 
-  app.use(express.methodOverride());
+app.use(express.cookieParser('newellls'));
 
-  app.use(express.cookieParser('newellls'));
+app.use(express.session());
 
-  app.use(express.session());
+app.use(app.router);
 
-  app.use(app.router);
+app.use(express["static"](path.join(__dirname, 'public')));
 
-  app.use(express["static"](path.join(__dirname, 'public')));
+if (app.get('env' === 'development')) {
+  app.use(express.errorHandler());
+}
 
-  if (app.get('env' === 'development')) {
-    app.use(express.errorHandler());
-  }
+app.post('/clone/:landingPage/:domain', routes.clone);
 
-  app.post('/clone/:landingPage/:domain', routes.clone);
+server = http.createServer(app);
 
-  (http.createServer(app)).listen(app.get('port'), function() {
-    return console.log("Express server listening on port " + (app.get('port')));
-  });
+server.listen(app.get('port'), function() {
+  return console.log("Express server listening on port " + (app.get('port')));
+});
 
-}).call(this);
+server.on('connection', function(socket) {
+  return socket.setKeepAlive(true);
+});

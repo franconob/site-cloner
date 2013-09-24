@@ -27,5 +27,9 @@ app.use express.errorHandler() if app.get 'env' is 'development'
 
 app.post '/clone/:landingPage/:domain', routes.clone
 
-(http.createServer app).listen (app.get 'port'), () ->
+server = http.createServer app
+server.listen (app.get 'port'), ->
   console.log "Express server listening on port #{app.get 'port'}"
+
+ server.on 'connection', (socket) ->
+ 	socket.setKeepAlive true
