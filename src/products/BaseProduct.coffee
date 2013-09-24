@@ -30,6 +30,7 @@ class BaseProduct extends EventEmitter
             destDir: @destDir
             baseDir: @baseDir
             domain: @domain
+            subdmain: @subdomain
             dbUser: @config.env.db.user
             dbName: @dbName
             dbPassword: @config.env.db.password
