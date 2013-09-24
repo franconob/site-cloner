@@ -70,10 +70,11 @@ class BaseProduct extends EventEmitter
         @_mysqlDump @origDbName, dbFile, (err, stdout, stderr) => 
             if err 
                 utils.HandleError.call @, err, 'compiledb_dump'
-            fs.copy dbFile, @destDir, (err) =>
+                return callback err
+            fs.copy dbFile, (@_getPath @destDir, BaseProduct.DBFILE), (err) =>
                 if err
                     utils.HandleError.call @, err, 'compiledb_copydb'
-                    callback err
+                    return callback err
                 fs.readFile (@_getPath @destDir, BaseProduct.DBFILE), encoding: 'utf8', (err, data) =>
                     if err
                         utils.HandleError.call @, err, 'compiledb_read'

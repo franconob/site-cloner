@@ -96,11 +96,12 @@ BaseProduct = (function(_super) {
     return this._mysqlDump(this.origDbName, dbFile, function(err, stdout, stderr) {
       if (err) {
         utils.HandleError.call(_this, err, 'compiledb_dump');
+        return callback(err);
       }
-      return fs.copy(dbFile, _this.destDir, function(err) {
+      return fs.copy(dbFile, _this._getPath(_this.destDir, BaseProduct.DBFILE), function(err) {
         if (err) {
           utils.HandleError.call(_this, err, 'compiledb_copydb');
-          callback(err);
+          return callback(err);
         }
         return fs.readFile(_this._getPath(_this.destDir, BaseProduct.DBFILE), {
           encoding: 'utf8'
