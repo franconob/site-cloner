@@ -5,7 +5,7 @@ class Wordpress extends BaseProduct
 
 class Joomla extends BaseProduct
 	constructor: (@config, @vars, @subdomain, destDir) ->
-		super @config, @vars, @subdomain, @destDir
+		super @config, @vars, @subdomain, destDir
 		@configFileVars['logDir'] = @_getPath @destDir, 'logs'
 		@configFileVars['tmpDir'] = @_getPath @destDir, 'tmp'
 

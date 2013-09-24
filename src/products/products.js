@@ -26,7 +26,7 @@ Joomla = (function(_super) {
     this.config = config;
     this.vars = vars;
     this.subdomain = subdomain;
-    Joomla.__super__.constructor.call(this, this.config, this.vars, this.subdomain, this.destDir);
+    Joomla.__super__.constructor.call(this, this.config, this.vars, this.subdomain, destDir);
     this.configFileVars['logDir'] = this._getPath(this.destDir, 'logs');
     this.configFileVars['tmpDir'] = this._getPath(this.destDir, 'tmp');
   }

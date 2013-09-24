@@ -5,6 +5,7 @@ EventEmitter = (require 'events').EventEmitter
 utils = require '../utils'
 fs = require 'fs-extra'
 _ = require 'underscore'
+path = require 'path'
 
 class BaseProduct extends EventEmitter
 
@@ -21,7 +22,9 @@ class BaseProduct extends EventEmitter
         @configFile = @config.configFile
 
         @domain = "#{@subdomain}#{@config.env.domain}"
-        @dbName = "lp_#{@subdomain}_#{@subdomain}"
+        @dbName = "lp_#{@subdomain}"
+
+        @origDbName = "lp_base_#{path.basename(@srcDir)}"
 
         @configFileVars =
             destDir: @destDir
@@ -62,20 +65,23 @@ class BaseProduct extends EventEmitter
             callback()
 
     compileDb: (callback) ->
-        fs.readFile (@_getPath @destDir, BaseProduct.DBFILE), encoding: 'utf8', (err, data) =>
-            if err
-                utils.HandleError.call @, err, 'compiledb_read'
-                return callback err
+        @_mysqlDump @origDbName, (@_getPath @srcDir, "htdocs", BaseProduct.DBFILE), (err, stdout, stderr) => 
+            if err 
+                utils.HandleError.call @, err, 'compiledb_dump'
+            fs.readFile (@_getPath @destDir, BaseProduct.DBFILE), encoding: 'utf8', (err, data) =>
+                if err
+                    utils.HandleError.call @, err, 'compiledb_read'
+                    return callback err
 
-            template = hogan.compile data
-            @dbCompiled = template.render @vars
+                template = hogan.compile data
+                @dbCompiled = template.render @vars
 
-            fs.writeFile (@_getPath @destDir, BaseProduct.DBFILE), @dbCompiled, (err) =>
-            if err
-                utils.HandleError.call @, err, 'compiledb_write'
-                return callback err
+                fs.writeFile (@_getPath @destDir, BaseProduct.DBFILE), @dbCompiled, (err) =>
+                if err
+                    utils.HandleError.call @, err, 'compiledb_write'
+                    return callback err
 
-            callback()
+                callback()
 
     createDb: (callback) ->
         dbName = "lp_#{@subdomain}"
@@ -94,11 +100,15 @@ class BaseProduct extends EventEmitter
             conn.end (err) ->
               callback()
 
-    _getPath: (dir, file) ->
-        [dir, file].join '/'
+    _getPath: (dir, path...) ->
+        path.unshift dir
+        path.join '/'
 
     _mysqlCmd: (db, file, callback) ->
         exec "mysql -u#{@config.env.db.user} -p#{@config.env.db.password} #{db} < #{file}", callback
+
+    _mysqlDump: (db, file, callback) ->
+        exec "mysqldump -u#{@config.env.db.user} -p#{@config.env.db.password} #{db} > #{file}", callback
 
     _connect: (options = {}) ->
         config =
