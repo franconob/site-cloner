@@ -13,6 +13,7 @@
     "fs-extra": "~0.6.3",
     "mysql": "~2.0.0-alpha8",
     "hogan.js": "~2.0.0",
-    "mysql2": "~0.8.18"
+    "mysql2": "~0.8.18",
+    "underscore": "~1.5.2"
   }
 }
