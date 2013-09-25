@@ -8,8 +8,9 @@ config = require('../src/config');
 fs = require('fs-extra');
 
 exports.clone = function(req, res) {
-  var cloner, data, lp, subdomain, _config;
+  var cloner, data, force, lp, subdomain, _config;
   req.connection.setTimeout(10 * 60 * 1000);
+  force = req.query.force;
   lp = req.params.landingPage;
   subdomain = req.params.domain;
   _config = {};
@@ -17,7 +18,7 @@ exports.clone = function(req, res) {
   _config['env'] = config[req.app.get('env')];
   data = req.body.data;
   cloner = Cloner.create(data, _config, lp, subdomain);
-  cloner.clone();
+  cloner.clone(force);
   cloner.on('success', function(domain) {
     return res.json({
       status: 'success',

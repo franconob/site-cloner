@@ -6,6 +6,8 @@ exports.clone = (req, res) ->
 
   req.connection.setTimeout 10 * 60 * 1000
 
+  force = req.query.force
+
   lp = req.params.landingPage
   subdomain = req.params.domain
 
@@ -17,7 +19,7 @@ exports.clone = (req, res) ->
 
   cloner = Cloner.create data, _config, lp, subdomain
 
-  cloner.clone()
+  cloner.clone(force)
 
   cloner.on 'success', (domain) ->
     res.json
