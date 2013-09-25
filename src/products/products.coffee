@@ -2,6 +2,16 @@ BaseProduct = require './BaseProduct'
 utils = require '../utils'
 
 class Wordpress extends BaseProduct
+	constructor: (@config, @vars, @subdomain, destDir) ->
+		super @config, @vars, @subdomain, destDir
+		@on 'compile.success', =>
+			con = @_connect database: "lp_#{@subdomain}"
+			conn.execute 'UPDATE wp_options SET option_value = ? WHERE option_name = ?', [@domain, 'siteurl'], (err, res) =>
+				if err
+					utils.HandleError.call @, err, 'updatedb_err'
+					return callback err
+				@emit 'success'
+
 
 class Joomla extends BaseProduct
 	constructor: (@config, @vars, @subdomain, destDir) ->
