@@ -18,6 +18,7 @@ Wordpress = (function(_super) {
     Wordpress.__super__.constructor.call(this, this.config, this.vars, this.subdomain, destDir);
     this.on('compile.success', function() {
       var conn;
+      console.log(_this.domain);
       conn = _this._connect({
         database: "lp_" + _this.subdomain
       });
@@ -27,7 +28,7 @@ Wordpress = (function(_super) {
           utils.HandleError.call(_this, err, 'updatedb_err');
           return;
         }
-        return _this.emit('success');
+        return _this.emit('success', _this.subdomain);
       });
     });
   }
