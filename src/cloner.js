@@ -52,14 +52,7 @@ Cloner = (function(_super) {
               utils.HandleError.call(_this, err, 'rmmdir');
               return;
             }
-            console.log('por borrar db');
             return _this.dropDb(function(err) {
-              console.log(err);
-              if (err) {
-                utils.HandleError.call(_this, err, 'dropdb');
-                return;
-              }
-              console.log('por ejecutar todo');
               return _this.createDir();
             });
           });

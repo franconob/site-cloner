@@ -34,13 +34,7 @@ class Cloner extends EventEmitter
               if err
                 utils.HandleError.call @, err, 'rmmdir'
                 return
-              console.log 'por borrar db'
               @dropDb (err) => 
-                console.log err
-                if err
-                  utils.HandleError.call @, err, 'dropdb'
-                  return
-                console.log 'por ejecutar todo'
                 @createDir()
       else
         @createDir()
