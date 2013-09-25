@@ -17,14 +17,14 @@ Wordpress = (function(_super) {
     this.subdomain = subdomain;
     Wordpress.__super__.constructor.call(this, this.config, this.vars, this.subdomain, destDir);
     this.on('compile.success', function() {
-      var con;
-      con = _this._connect({
+      var conn;
+      conn = _this._connect({
         database: "lp_" + _this.subdomain
       });
       return conn.execute('UPDATE wp_options SET option_value = ? WHERE option_name = ?', [_this.domain, 'siteurl'], function(err, res) {
         if (err) {
           utils.HandleError.call(_this, err, 'updatedb_err');
-          return callback(err);
+          return;
         }
         return _this.emit('success');
       });
