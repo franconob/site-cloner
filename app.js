@@ -43,6 +43,8 @@ if (app.get('env' === 'development')) {
 
 app.post('/clone/:landingPage/:domain', routes.clone);
 
+app.get('/catalog', routes.catalog);
+
 server = http.createServer(app);
 
 server.listen(app.get('port'), function() {

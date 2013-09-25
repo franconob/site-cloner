@@ -23,27 +23,33 @@ class Cloner extends EventEmitter
 
   clone: () ->
 
+    fs.exists @dest, (exists) =>
+      if exists
+        utils.HandleError.call @, new Error('El dominio ya existe'), 'domain_exists', @subdomain
+        return
+      else
+        Product = ClonerFactory.getCloner @lp, @config, @vars, @subdomain, @dest
 
-    Product = ClonerFactory.getCloner @lp, @config, @vars, @subdomain, @dest
+        mkdirp @dest, (err) =>
+          if err
+            utils.HandleError.call @, err, 'mkdir', @dest
+            return 
 
-    mkdirp @dest, (err) =>
-      if err
-        utils.HandleError.call @, err, 'mkdir', @dest
-        return 
+          fs.copy @config.env.srcDir, @dest, (err) =>
+            if err
+              utils.HandleError.call @, err, 'copy', @config.env.srcDir, @dest
+              return 
 
-      fs.copy @config.env.srcDir, @dest, (err) =>
-        if err
-          utils.HandleError.call @, err, 'copy', @config.env.srcDir, @dest
-          return 
+            Product.compile()
 
-        Product.compile()
+            Product.on 'success', (domain) =>
+              @_fixPerms Product, () =>
+                @emit 'success', domain
+            
+            Product.on 'error', (err, type, args) =>
+              @emit 'error', err, type, args
 
-        Product.on 'success', (domain) =>
-          @_fixPerms Product, () =>
-            @emit 'success', domain
-        
-        Product.on 'error', (err, type, args) =>
-          @emit 'error', err, type, args
+    
 
   _fixPerms: (product, cb) ->
     utils.GetUid "", 'u', (err, uid, stderr) =>

@@ -37,29 +37,35 @@ Cloner = (function(_super) {
   }
 
   Cloner.prototype.clone = function() {
-    var Product,
-      _this = this;
-    Product = ClonerFactory.getCloner(this.lp, this.config, this.vars, this.subdomain, this.dest);
-    return mkdirp(this.dest, function(err) {
-      if (err) {
-        utils.HandleError.call(_this, err, 'mkdir', _this.dest);
-        return;
-      }
-      return fs.copy(_this.config.env.srcDir, _this.dest, function(err) {
-        if (err) {
-          utils.HandleError.call(_this, err, 'copy', _this.config.env.srcDir, _this.dest);
-          return;
-        }
-        Product.compile();
-        Product.on('success', function(domain) {
-          return _this._fixPerms(Product, function() {
-            return _this.emit('success', domain);
+    var _this = this;
+    return fs.exists(this.dest, function(exists) {
+      var Product;
+      if (exists) {
+        utils.HandleError.call(_this, new Error('El dominio ya existe'), 'domain_exists', _this.subdomain);
+      } else {
+        Product = ClonerFactory.getCloner(_this.lp, _this.config, _this.vars, _this.subdomain, _this.dest);
+        return mkdirp(_this.dest, function(err) {
+          if (err) {
+            utils.HandleError.call(_this, err, 'mkdir', _this.dest);
+            return;
+          }
+          return fs.copy(_this.config.env.srcDir, _this.dest, function(err) {
+            if (err) {
+              utils.HandleError.call(_this, err, 'copy', _this.config.env.srcDir, _this.dest);
+              return;
+            }
+            Product.compile();
+            Product.on('success', function(domain) {
+              return _this._fixPerms(Product, function() {
+                return _this.emit('success', domain);
+              });
+            });
+            return Product.on('error', function(err, type, args) {
+              return _this.emit('error', err, type, args);
+            });
           });
         });
-        return Product.on('error', function(err, type, args) {
-          return _this.emit('error', err, type, args);
-        });
-      });
+      }
     });
   };
 

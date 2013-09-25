@@ -1,5 +1,6 @@
 Cloner = (require '../src/cloner')
 config = require '../src/config'
+fs = require 'fs-extra'
 
 exports.clone = (req, res) ->
 
@@ -31,3 +32,10 @@ exports.clone = (req, res) ->
         type: type
         code: err.code
         message: err.toString()
+
+exports.catalog = (req, res) ->
+  fs.readdir config[req.app.get 'env'].srcDir, (err, dirs) ->
+    res.json
+      status: 'success'
+      catalog: dirs
+
