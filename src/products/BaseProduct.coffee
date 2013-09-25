@@ -21,7 +21,7 @@ class BaseProduct extends EventEmitter
         @srcDir = @config.env.srcDir
         @configFile = @config.configFile
 
-        @domain = "#{@subdomain}#{@config.env.domain}"
+        @fqdn = "#{@subdomain}#{@config.env.domain}"
         @dbName = "lp_#{@subdomain}"
 
         @origDbName = "lp_base_#{path.basename(@srcDir)}"
@@ -29,24 +29,24 @@ class BaseProduct extends EventEmitter
         @configFileVars =
             destDir: @destDir
             baseDir: @baseDir
-            domain: @domain
+            domain: @fqdn
             subdomain: @subdomain
             dbUser: @config.env.db.user
             dbName: @dbName
             dbPassword: @config.env.db.password
 
-        @vars = _.extend @vars, @configFileVars
+        @vars = _.extend {}, @vars, @configFileVars
 
         EventEmitter.call @
 
-    compile: (@conn) ->
+    compile: () ->
         @compileDb =>
             @createDb =>
                 @compileConfig =>
                     if EventEmitter.listenerCount @, 'compile.success'
                         @emit 'compile.success'
                     else
-                        @emit 'success', @subdomain
+                        @emit 'success', @fqdn
 
     compileConfig: (callback) ->
         config = @_getPath @destDir, @configFile
@@ -91,15 +91,13 @@ class BaseProduct extends EventEmitter
                     return callback(err)
 
     createDb: (callback) ->
-        dbName = "lp_#{@subdomain}"
-
         conn = @_connect()
-        conn.query "CREATE DATABASE #{dbName} CHARACTER SET utf8 COLLATE utf8_general_ci", (err, result) =>
+        conn.query "CREATE DATABASE #{@dbName} CHARACTER SET utf8 COLLATE utf8_general_ci", (err, result) =>
           if err
-            utils.HandleError.call @, err, 'createdb', dbName
+            utils.HandleError.call @, err, 'createdb', @dbName
             return callback err
 
-          @_mysqlCmd dbName, (@_getPath @destDir, BaseProduct.DBFILE), (err, stdout, stderr) =>
+          @_mysqlCmd @dbName, (@_getPath @destDir, BaseProduct.DBFILE), (err, stdout, stderr) =>
             if err
               utils.HandleError.call @, err, 'sourcedb', stderr
               return callback err
@@ -124,7 +122,6 @@ class BaseProduct extends EventEmitter
           multipleStatements: true
 
         mysql.createConnection (_.extend config, options)
-    
     
 
 module.exports = BaseProduct

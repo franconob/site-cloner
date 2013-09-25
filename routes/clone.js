@@ -6,20 +6,20 @@ Cloner = require('../src/cloner');
 config = require('../src/config');
 
 exports.clone = function(req, res) {
-  var cloner, data, domain, lp, _config;
+  var cloner, data, lp, subdomain, _config;
   req.connection.setTimeout(10 * 60 * 1000);
   lp = req.params.landingPage;
-  domain = req.params.domain;
+  subdomain = req.params.domain;
   _config = {};
   _config = config['products'][lp];
   _config['env'] = config[req.app.get('env')];
   data = req.body.data;
-  cloner = Cloner.create(data, _config, lp, domain);
+  cloner = Cloner.create(data, _config, lp, subdomain);
   cloner.clone();
   cloner.on('success', function(domain) {
     return res.json({
       status: 'success',
-      domain: "" + domain + _config.env.domain
+      domain: domain
     });
   });
   return cloner.on('error', function(err, type, args) {

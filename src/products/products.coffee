@@ -2,21 +2,22 @@ BaseProduct = require './BaseProduct'
 utils = require '../utils'
 
 class Wordpress extends BaseProduct
-	constructor: (@config, @vars, @subdomain, destDir) ->
-		super @config, @vars, @subdomain, destDir
+	constructor: (config, vars, subdomain, destDir) ->
+		super config, vars, subdomain, destDir
 		@on 'compile.success', =>
-			console.log 'dominio', @domain
-			conn = @_connect database: "lp_#{@subdomain}"
-			conn.execute 'UPDATE wp_options SET option_value = ? WHERE option_name = ?', [@domain, 'siteurl'], (err, res) =>
-				if err
-					utils.HandleError.call @, err, 'updatedb_err'
-					return
-				@emit 'success', @subdomain
-
+			@updateDb()
+			
+	updateDb: ->
+		conn = @_connect database: "lp_#{@subdomain}"
+		conn.execute 'UPDATE wp_options SET option_value = ? WHERE option_name = ?', [@fqdn, 'siteurl'], (err, res) =>
+			if err
+				utils.HandleError.call @, err, 'updatedb_err'
+				return
+			@emit 'success', @fqdn
 
 class Joomla extends BaseProduct
-	constructor: (@config, @vars, @subdomain, destDir) ->
-		super @config, @vars, @subdomain, destDir
+	constructor: (config, vars, subdomain, destDir) ->
+		super config, vars, subdomain, destDir
 		@configFileVars['logDir'] = @_getPath @destDir, 'logs'
 		@configFileVars['tmpDir'] = @_getPath @destDir, 'tmp'
 
@@ -30,8 +31,8 @@ class Vtiger extends BaseProduct
 
 class Elgg extends BaseProduct
 
-	constructor: (@config, @vars, @subdomain, destdir) ->
-		super @config, @vars, @subdomain, destdir
+	constructor: (config, vars, subdomain, destdir) ->
+		super config, vars, subdomain, destdir
 		@on 'compile.success', =>
 			@updateDb()
 
@@ -43,7 +44,7 @@ class Elgg extends BaseProduct
 			conn.execute 'UPDATE `elgg_datalists` SET `value` = ? WHERE `name` = "dataroot"', ["#{@baseDir}/elgg_data/"], (err, res) =>
 				if err 
 					utils.HandleError.call @, err, 'updatedb_err'
-				conn.execute 'UPDATE `elgg_sites_entity` SET `url` = ?',[@domain], (err, res) =>
+				conn.execute 'UPDATE `elgg_sites_entity` SET `url` = ?',[@fqdn], (err, res) =>
 					if err 
 						utils.HandleError.call @, err, 'updatedb_err'
 					conn.execute "UPDATE elgg_metastrings set string = ? WHERE id = (SELECT value_id from elgg_metadata where name_id = 
@@ -53,7 +54,7 @@ class Elgg extends BaseProduct
 						conn.end (err) =>
 							if err 
 								utils.HandleError.call @, err, 'updatedb_err'
-							@emit 'success', @subdomain
+							@emit 'success', @fqdn
 
 
 module.exports.Wordpress = Wordpress

@@ -34,32 +34,31 @@ BaseProduct = (function(_super) {
     this.destDir = this._getPath(this.baseDir, 'htdocs');
     this.srcDir = this.config.env.srcDir;
     this.configFile = this.config.configFile;
-    this.domain = "" + this.subdomain + this.config.env.domain;
+    this.fqdn = "" + this.subdomain + this.config.env.domain;
     this.dbName = "lp_" + this.subdomain;
     this.origDbName = "lp_base_" + (path.basename(this.srcDir));
     this.configFileVars = {
       destDir: this.destDir,
       baseDir: this.baseDir,
-      domain: this.domain,
+      domain: this.fqdn,
       subdomain: this.subdomain,
       dbUser: this.config.env.db.user,
       dbName: this.dbName,
       dbPassword: this.config.env.db.password
     };
-    this.vars = _.extend(this.vars, this.configFileVars);
+    this.vars = _.extend({}, this.vars, this.configFileVars);
     EventEmitter.call(this);
   }
 
-  BaseProduct.prototype.compile = function(conn) {
+  BaseProduct.prototype.compile = function() {
     var _this = this;
-    this.conn = conn;
     return this.compileDb(function() {
       return _this.createDb(function() {
         return _this.compileConfig(function() {
           if (EventEmitter.listenerCount(_this, 'compile.success')) {
             return _this.emit('compile.success');
           } else {
-            return _this.emit('success', _this.subdomain);
+            return _this.emit('success', _this.fqdn);
           }
         });
       });
@@ -125,16 +124,15 @@ BaseProduct = (function(_super) {
   };
 
   BaseProduct.prototype.createDb = function(callback) {
-    var conn, dbName,
+    var conn,
       _this = this;
-    dbName = "lp_" + this.subdomain;
     conn = this._connect();
-    return conn.query("CREATE DATABASE " + dbName + " CHARACTER SET utf8 COLLATE utf8_general_ci", function(err, result) {
+    return conn.query("CREATE DATABASE " + this.dbName + " CHARACTER SET utf8 COLLATE utf8_general_ci", function(err, result) {
       if (err) {
-        utils.HandleError.call(_this, err, 'createdb', dbName);
+        utils.HandleError.call(_this, err, 'createdb', _this.dbName);
         return callback(err);
       }
-      return _this._mysqlCmd(dbName, _this._getPath(_this.destDir, BaseProduct.DBFILE), function(err, stdout, stderr) {
+      return _this._mysqlCmd(_this.dbName, _this._getPath(_this.destDir, BaseProduct.DBFILE), function(err, stdout, stderr) {
         if (err) {
           utils.HandleError.call(_this, err, 'sourcedb', stderr);
           return callback(err);

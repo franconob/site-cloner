@@ -12,25 +12,26 @@ Wordpress = (function(_super) {
 
   function Wordpress(config, vars, subdomain, destDir) {
     var _this = this;
-    this.config = config;
-    this.vars = vars;
-    this.subdomain = subdomain;
-    Wordpress.__super__.constructor.call(this, this.config, this.vars, this.subdomain, destDir);
+    Wordpress.__super__.constructor.call(this, config, vars, subdomain, destDir);
     this.on('compile.success', function() {
-      var conn;
-      console.log('dominio', _this.domain);
-      conn = _this._connect({
-        database: "lp_" + _this.subdomain
-      });
-      return conn.execute('UPDATE wp_options SET option_value = ? WHERE option_name = ?', [_this.domain, 'siteurl'], function(err, res) {
-        if (err) {
-          utils.HandleError.call(_this, err, 'updatedb_err');
-          return;
-        }
-        return _this.emit('success', _this.subdomain);
-      });
+      return _this.updateDb();
     });
   }
+
+  Wordpress.prototype.updateDb = function() {
+    var conn,
+      _this = this;
+    conn = this._connect({
+      database: "lp_" + this.subdomain
+    });
+    return conn.execute('UPDATE wp_options SET option_value = ? WHERE option_name = ?', [this.fqdn, 'siteurl'], function(err, res) {
+      if (err) {
+        utils.HandleError.call(_this, err, 'updatedb_err');
+        return;
+      }
+      return _this.emit('success', _this.fqdn);
+    });
+  };
 
   return Wordpress;
 
@@ -40,10 +41,7 @@ Joomla = (function(_super) {
   __extends(Joomla, _super);
 
   function Joomla(config, vars, subdomain, destDir) {
-    this.config = config;
-    this.vars = vars;
-    this.subdomain = subdomain;
-    Joomla.__super__.constructor.call(this, this.config, this.vars, this.subdomain, destDir);
+    Joomla.__super__.constructor.call(this, config, vars, subdomain, destDir);
     this.configFileVars['logDir'] = this._getPath(this.destDir, 'logs');
     this.configFileVars['tmpDir'] = this._getPath(this.destDir, 'tmp');
   }
@@ -105,10 +103,7 @@ Elgg = (function(_super) {
 
   function Elgg(config, vars, subdomain, destdir) {
     var _this = this;
-    this.config = config;
-    this.vars = vars;
-    this.subdomain = subdomain;
-    Elgg.__super__.constructor.call(this, this.config, this.vars, this.subdomain, destdir);
+    Elgg.__super__.constructor.call(this, config, vars, subdomain, destdir);
     this.on('compile.success', function() {
       return _this.updateDb();
     });
@@ -128,7 +123,7 @@ Elgg = (function(_super) {
         if (err) {
           utils.HandleError.call(_this, err, 'updatedb_err');
         }
-        return conn.execute('UPDATE `elgg_sites_entity` SET `url` = ?', [_this.domain], function(err, res) {
+        return conn.execute('UPDATE `elgg_sites_entity` SET `url` = ?', [_this.fqdn], function(err, res) {
           if (err) {
             utils.HandleError.call(_this, err, 'updatedb_err');
           }
@@ -140,7 +135,7 @@ Elgg = (function(_super) {
               if (err) {
                 utils.HandleError.call(_this, err, 'updatedb_err');
               }
-              return _this.emit('success', _this.subdomain);
+              return _this.emit('success', _this.fqdn);
             });
           });
         });
