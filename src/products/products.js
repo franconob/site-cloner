@@ -22,6 +22,7 @@ Wordpress = (function(_super) {
         database: "lp_" + _this.subdomain
       });
       return conn.execute('UPDATE wp_options SET option_value = ? WHERE option_name = ?', [_this.domain, 'siteurl'], function(err, res) {
+        console.log(err, res);
         if (err) {
           utils.HandleError.call(_this, err, 'updatedb_err');
           return;

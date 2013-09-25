@@ -7,6 +7,7 @@ class Wordpress extends BaseProduct
 		@on 'compile.success', =>
 			conn = @_connect database: "lp_#{@subdomain}"
 			conn.execute 'UPDATE wp_options SET option_value = ? WHERE option_name = ?', [@domain, 'siteurl'], (err, res) =>
+				console.log err, res
 				if err
 					utils.HandleError.call @, err, 'updatedb_err'
 					return
