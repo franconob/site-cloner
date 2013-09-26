@@ -11,7 +11,7 @@
   Wordpress = (function(_super) {
     __extends(Wordpress, _super);
 
-    function Wordpress(config, vars, subdomain, destDir) {
+    function Wordpress(config, vars, subdomain, landingpage, destDir) {
       var _this = this;
       Wordpress.__super__.constructor.call(this, config, vars, subdomain, destDir);
       this.on('compile.success', function() {
@@ -49,7 +49,7 @@
   Joomla = (function(_super) {
     __extends(Joomla, _super);
 
-    function Joomla(config, vars, subdomain, destDir) {
+    function Joomla(config, vars, subdomain, landingpage, destDir) {
       Joomla.__super__.constructor.call(this, config, vars, subdomain, destDir);
       this.configFileVars['logDir'] = this._getPath(this.destDir, 'logs');
       this.configFileVars['tmpDir'] = this._getPath(this.destDir, 'tmp');
@@ -110,7 +110,7 @@
   Elgg = (function(_super) {
     __extends(Elgg, _super);
 
-    function Elgg(config, vars, subdomain, destdir) {
+    function Elgg(config, vars, subdomain, landingpage, destdir) {
       var _this = this;
       Elgg.__super__.constructor.call(this, config, vars, subdomain, destdir);
       this.on('compile.success', function() {
