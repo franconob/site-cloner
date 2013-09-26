@@ -25,6 +25,8 @@ module.exports =
   products:
     wordpress:
       configFile: 'wp-config.php'
+    wordpress_001:
+      configFile: 'wp-config.php'
     joomla:
       configFile: 'configuration.php'
     limesurvey:

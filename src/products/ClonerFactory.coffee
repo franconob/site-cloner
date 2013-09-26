@@ -4,6 +4,7 @@ ClonerFactory =
 	getCloner: (landingPage, config, vars, subdomain, destDir) ->
 		cloner = switch landingPage
 			when 'wordpress' then new products.Wordpress(config, vars, subdomain, destDir)
+			when 'wordpress_001' then new products.Wordpress(config, vars, subdomain, destDir)
 			when 'joomla' then new products.Joomla(config, vars, subdomain, destDir)
 			when 'limesurvey' then new products.Limesurvey(config, vars, subdomain, destDir)
 			when 'moodle' then new products.Moodle(config, vars, subdomain, destDir)
