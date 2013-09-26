@@ -18,7 +18,7 @@ class BaseProduct extends EventEmitter
         @baseDir = destDir
         @destDir = @_getPath @baseDir, 'htdocs'
 
-        @srcDir = @config.env.srcDir
+        @srcDir = "@config.env.srcDir/#{@subdomain}"
         @configFile = @config.configFile
 
         @fqdn = "#{@subdomain}#{@config.env.domain}"
