@@ -3,7 +3,7 @@ utils = require '../utils'
 
 class Wordpress extends BaseProduct
 	constructor: (config, vars, subdomain, landingpage, destDir) ->
-		super config, vars, subdomain, destDir
+		super config, vars, subdomain, landingpage, destDir
 		@on 'compile.success', =>
 			@updateDb()
 			
@@ -22,7 +22,7 @@ class Wordpress extends BaseProduct
 
 class Joomla extends BaseProduct
 	constructor: (config, vars, subdomain, landingpage, destDir) ->
-		super config, vars, subdomain, destDir
+		super config, vars, subdomain, landingpage, destDir
 		@configFileVars['logDir'] = @_getPath @destDir, 'logs'
 		@configFileVars['tmpDir'] = @_getPath @destDir, 'tmp'
 
@@ -37,7 +37,7 @@ class Vtiger extends BaseProduct
 class Elgg extends BaseProduct
 
 	constructor: (config, vars, subdomain, landingpage, destdir) ->
-		super config, vars, subdomain, destdir
+		super config, vars, subdomain, landingpage, destdir
 		@on 'compile.success', =>
 			@updateDb()
 

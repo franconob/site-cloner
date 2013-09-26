@@ -13,7 +13,7 @@
 
     function Wordpress(config, vars, subdomain, landingpage, destDir) {
       var _this = this;
-      Wordpress.__super__.constructor.call(this, config, vars, subdomain, destDir);
+      Wordpress.__super__.constructor.call(this, config, vars, subdomain, landingpage, destDir);
       this.on('compile.success', function() {
         return _this.updateDb();
       });
@@ -50,7 +50,7 @@
     __extends(Joomla, _super);
 
     function Joomla(config, vars, subdomain, landingpage, destDir) {
-      Joomla.__super__.constructor.call(this, config, vars, subdomain, destDir);
+      Joomla.__super__.constructor.call(this, config, vars, subdomain, landingpage, destDir);
       this.configFileVars['logDir'] = this._getPath(this.destDir, 'logs');
       this.configFileVars['tmpDir'] = this._getPath(this.destDir, 'tmp');
     }
@@ -112,7 +112,7 @@
 
     function Elgg(config, vars, subdomain, landingpage, destdir) {
       var _this = this;
-      Elgg.__super__.constructor.call(this, config, vars, subdomain, destdir);
+      Elgg.__super__.constructor.call(this, config, vars, subdomain, landingpage, destdir);
       this.on('compile.success', function() {
         return _this.updateDb();
       });
