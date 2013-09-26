@@ -11,7 +11,7 @@ class Cloner extends EventEmitter
   constructor: (@vars, @config, @lp, @subdomain) ->
 
     @dest = "#{@config.env.destDir}/#{@subdomain}"
-    @config.env.srcDir = "#{@config.env.srcDir}/#{@lp}"
+    @srcDir = "#{@config.env.srcDir}/#{@lp}"
 
     EventEmitter.call @
 
@@ -40,9 +40,9 @@ class Cloner extends EventEmitter
         utils.HandleError.call @, err, 'mkdir', @dest
         return 
 
-      fs.copy @config.env.srcDir, @dest, (err) =>
+      fs.copy @srcDir, @dest, (err) =>
         if err
-          utils.HandleError.call @, err, 'copy', @config.env.srcDir, @dest
+          utils.HandleError.call @, err, 'copy', @srcDir, @dest
           return 
 
         Product.compile()

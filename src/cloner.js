@@ -27,7 +27,7 @@
       this.lp = lp;
       this.subdomain = subdomain;
       this.dest = "" + this.config.env.destDir + "/" + this.subdomain;
-      this.config.env.srcDir = "" + this.config.env.srcDir + "/" + this.lp;
+      this.srcDir = "" + this.config.env.srcDir + "/" + this.lp;
       EventEmitter.call(this);
     }
 
@@ -63,9 +63,9 @@
           utils.HandleError.call(_this, err, 'mkdir', _this.dest);
           return;
         }
-        return fs.copy(_this.config.env.srcDir, _this.dest, function(err) {
+        return fs.copy(_this.srcDir, _this.dest, function(err) {
           if (err) {
-            utils.HandleError.call(_this, err, 'copy', _this.config.env.srcDir, _this.dest);
+            utils.HandleError.call(_this, err, 'copy', _this.srcDir, _this.dest);
             return;
           }
           Product.compile();
