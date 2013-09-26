@@ -48,4 +48,13 @@
     });
   };
 
+  exports["public"] = function(req, res) {
+    return fs.readdir(config[req.app.get('env')].destDir, function(err, dirs) {
+      return res.json({
+        status: 'success',
+        webs: dirs
+      });
+    });
+  };
+
 }).call(this);

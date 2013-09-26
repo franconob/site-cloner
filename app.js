@@ -3,54 +3,60 @@
   Module dependencies
 */
 
-var app, express, http, path, routes, server;
 
-express = require('express');
+(function() {
+  var app, express, http, path, routes, server;
 
-routes = require('./routes/clone');
+  express = require('express');
 
-http = require('http');
+  routes = require('./routes/clone');
 
-path = require('path');
+  http = require('http');
 
-app = express();
+  path = require('path');
 
-app.set('port', process.env.PORT || 3000);
+  app = express();
 
-app.set('views', "" + __dirname + "/views");
+  app.set('port', process.env.PORT || 3000);
 
-app.set('view engine', 'hjs');
+  app.set('views', "" + __dirname + "/views");
 
-app.use(express.favicon());
+  app.set('view engine', 'hjs');
 
-app.use(express.logger('dev'));
+  app.use(express.favicon());
 
-app.use(express.bodyParser());
+  app.use(express.logger('dev'));
 
-app.use(express.methodOverride());
+  app.use(express.bodyParser());
 
-app.use(express.cookieParser('newellls'));
+  app.use(express.methodOverride());
 
-app.use(express.session());
+  app.use(express.cookieParser('newellls'));
 
-app.use(app.router);
+  app.use(express.session());
 
-app.use(express["static"](path.join(__dirname, 'public')));
+  app.use(app.router);
 
-if (app.get('env' === 'development')) {
-  app.use(express.errorHandler());
-}
+  app.use(express["static"](path.join(__dirname, 'public')));
 
-app.post('/clone/:landingPage/:domain', routes.clone);
+  if (app.get('env' === 'development')) {
+    app.use(express.errorHandler());
+  }
 
-app.get('/catalog', routes.catalog);
+  app.post('/clone/:landingPage/:domain', routes.clone);
 
-server = http.createServer(app);
+  app.get('/catalog', routes.catalog);
 
-server.listen(app.get('port'), function() {
-  return console.log("Express server listening on port " + (app.get('port')));
-});
+  app.get('/public', routes["public"]);
 
-server.on('connection', function(socket) {
-  return socket.setKeepAlive(true);
-});
+  server = http.createServer(app);
+
+  server.listen(app.get('port'), function() {
+    return console.log("Express server listening on port " + (app.get('port')));
+  });
+
+  server.on('connection', function(socket) {
+    return socket.setKeepAlive(true);
+  });
+
+}).call(this);

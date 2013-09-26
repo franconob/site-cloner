@@ -41,3 +41,11 @@ exports.catalog = (req, res) ->
       status: 'success'
       catalog: dirs
 
+exports.public = (req, res) ->
+  fs.readdir config[req.app.get 'env'].destDir, (err, dirs) ->
+    res.json
+      status: 'success'
+      webs: dirs
+
+
+

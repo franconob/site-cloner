@@ -5,6 +5,7 @@ EventEmitter = (require 'events').EventEmitter
 utils = require './utils'
 rimraf = require 'rimraf'
 mysql = require 'mysql2'
+exec = (require 'child_process').exec
 
 class Cloner extends EventEmitter
 
@@ -64,11 +65,10 @@ class Cloner extends EventEmitter
         callback err
 
   _fixPerms: (product, cb) ->
-    utils.GetUid "", 'u', (err, uid, stderr) =>
-      utils.GetUid @config.env.unix.httpGroup, 'g', (err, gid, stderr) =>
-        fs.chown product.baseDir, (parseInt uid), (parseInt gid), (err) =>
-          if err
-            utils.HandleError.call @, err, 'chown_err'
-          cb()
+    exec "chown root:#{@config.env.unix.httpGroup} -R #{product.baseDir}", (err, stdout, stderr) =>
+      exec "chmod 775 -R #{product.baseDir}", (err, stdout, stderr) =>
+      if err
+        utils.HandleError.call @, err, 'chown_err'
+      cb(err)
 
 module.exports = Cloner

@@ -27,6 +27,7 @@ app.use express.errorHandler() if app.get 'env' is 'development'
 
 app.post '/clone/:landingPage/:domain', routes.clone
 app.get '/catalog', routes.catalog
+app.get '/public', routes.public
 
 server = http.createServer app
 server.listen (app.get 'port'), ->
