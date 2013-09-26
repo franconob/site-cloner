@@ -17,7 +17,8 @@ class Wordpress extends BaseProduct
 				if err
 					utils.HandleError.call @, err, 'updatedb_err'
 					return
-			@emit 'success', @fqdn
+				conn.end =>
+					@emit 'success', @fqdn
 
 class Joomla extends BaseProduct
 	constructor: (config, vars, subdomain, destDir) ->

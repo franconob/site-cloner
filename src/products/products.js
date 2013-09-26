@@ -30,12 +30,15 @@
           utils.HandleError.call(_this, err, 'updatedb_err');
           return;
         }
-        conn.execute('UPDATE wp_options SET option_value = ? WHERE option_name = ?', ["http://" + _this.fqdn, 'home'], function(err, res) {
+        return conn.execute('UPDATE wp_options SET option_value = ? WHERE option_name = ?', ["http://" + _this.fqdn, 'home'], function(err, res) {
           if (err) {
             utils.HandleError.call(_this, err, 'updatedb_err');
+            return;
           }
+          return conn.end(function() {
+            return _this.emit('success', _this.fqdn);
+          });
         });
-        return _this.emit('success', _this.fqdn);
       });
     };
 
