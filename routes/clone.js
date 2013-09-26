@@ -28,7 +28,7 @@
     });
     return cloner.on('error', function(err, type, args) {
       console.log(err, type, args);
-      return res.json(500, {
+      return res.json(200, {
         status: 'error',
         error: {
           type: type,

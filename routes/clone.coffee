@@ -28,7 +28,7 @@ exports.clone = (req, res) ->
 
   cloner.on 'error', (err, type, args) ->
     console.log err, type, args
-    res.json 500,
+    res.json 200,
       status: 'error'
       error:
         type: type
