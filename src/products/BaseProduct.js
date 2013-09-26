@@ -26,14 +26,15 @@
 
     BaseProduct.DBFILE = 'db.sql';
 
-    function BaseProduct(config, vars, subdomain, destDir) {
+    function BaseProduct(config, vars, subdomain, landingpage, destDir) {
       this.config = config;
       this.vars = vars;
       this.subdomain = subdomain;
+      this.landingpage = landingpage;
       this.vars = this.vars || {};
       this.baseDir = destDir;
       this.destDir = this._getPath(this.baseDir, 'htdocs');
-      this.srcDir = "" + this.config.env.srcDir + "/" + this.subdomain;
+      this.srcDir = "" + this.config.env.srcDir + "/" + this.landingpage;
       this.configFile = this.config.configFile;
       this.fqdn = "" + this.subdomain + this.config.env.domain;
       this.dbName = "lp_" + this.subdomain;
