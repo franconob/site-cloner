@@ -33,7 +33,7 @@
       this.vars = this.vars || {};
       this.baseDir = destDir;
       this.destDir = this._getPath(this.baseDir, 'htdocs');
-      this.srcDir = "@config.env.srcDir/" + this.subdomain;
+      this.srcDir = "" + this.config.env.srcDir + "/" + this.subdomain;
       this.configFile = this.config.configFile;
       this.fqdn = "" + this.subdomain + this.config.env.domain;
       this.dbName = "lp_" + this.subdomain;
