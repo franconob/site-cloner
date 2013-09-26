@@ -17,7 +17,7 @@ exports.clone = (req, res) ->
 
   data = req.body.data
 
-  cloner = Cloner.create data, _config, lp, subdomain
+  cloner = new Cloner data, _config, lp, subdomain
 
   cloner.clone(force)
 

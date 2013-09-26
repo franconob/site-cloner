@@ -8,14 +8,6 @@ mysql = require 'mysql2'
 
 class Cloner extends EventEmitter
 
-  @instance = null
-
-  @create: (vars, config, lp, subdomain) ->
-    if Cloner.instance is null
-      return Cloner.instance = new Cloner vars, config, lp, subdomain
-    else
-      return Cloner.instance
-  
   constructor: (@vars, @config, @lp, @subdomain) ->
 
     @dest = "#{@config.env.destDir}/#{@subdomain}"

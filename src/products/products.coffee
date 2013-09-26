@@ -9,10 +9,14 @@ class Wordpress extends BaseProduct
 			
 	updateDb: ->
 		conn = @_connect database: "lp_#{@subdomain}"
-		conn.execute 'UPDATE wp_options SET option_value = ? WHERE option_name = ?', [@fqdn, 'siteurl'], (err, res) =>
+		conn.execute 'UPDATE wp_options SET option_value = ? WHERE option_name = ?', ["http://#{@fqdn}", 'siteurl'], (err, res) =>
 			if err
 				utils.HandleError.call @, err, 'updatedb_err'
 				return
+			conn.execute 'UPDATE wp_options SET option_value = ? WHERE option_name = ?', ["http://#{@fqdn}", 'home'], (err, res) =>
+				if err
+					utils.HandleError.call @, err, 'updatedb_err'
+					return
 			@emit 'success', @fqdn
 
 class Joomla extends BaseProduct
