@@ -11,14 +11,14 @@ class BaseProduct extends EventEmitter
 
     @DBFILE: 'db.sql'
 
-    constructor: (@config, @vars, @subdomain, destDir) ->
+    constructor: (@config, @vars, @subdomain, @landingpage, destDir) ->
 
         @vars = @vars || {}
 
         @baseDir = destDir
         @destDir = @_getPath @baseDir, 'htdocs'
 
-        @srcDir = "#{@config.env.srcDir}/#{@subdomain}"
+        @srcDir = "#{@config.env.srcDir}/#{@landingpage}"
         @configFile = @config.configFile
 
         @fqdn = "#{@subdomain}#{@config.env.domain}"
