@@ -34,6 +34,12 @@
       wordpress_001: {
         configFile: 'wp-config.php'
       },
+      wordpress_blog: {
+        configFile: 'wp-config.php'
+      },
+      landing_001: {
+        configFile: 'wp-config.php'
+      },
       joomla: {
         configFile: 'configuration.php'
       },
