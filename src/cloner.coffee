@@ -50,7 +50,10 @@ class Cloner extends EventEmitter
 
         Product.on 'success', (domain) =>
           @_fixPerms Product, () =>
-            @emit 'success', domain
+            @_createVirtualMinHost domain, (err) =>
+              if err
+                utils.HandleError.call @, err, 'virtualmin create-host'
+              @emit 'success', domain
         
         Product.on 'error', (err, type, args) =>
           @emit 'error', err, type, args
@@ -69,6 +72,10 @@ class Cloner extends EventEmitter
       exec "chmod 775 -R #{product.baseDir}", (err, stdout, stderr) =>
       if err
         utils.HandleError.call @, err, 'chown_err'
+      cb(err)
+
+  _createVirtualMinHost: (domain, cb) ->
+    exec "virtualmin create-domain --domain #{domain} --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp", (err, stdout, stderr) =>
       cb(err)
 
 module.exports = Cloner
