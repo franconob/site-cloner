@@ -12,8 +12,8 @@ module.exports =
       httpGroup: 'http'
 
   production:
-    srcDir: '/var/www/catalog'
-    destDir: '/var/www/public'
+    srcDir: '/home/cloner/catalog'
+    destDir: '/home/cloner/domains'
     domain: '.cl.finderit.com'
     db:
       user: 'root'

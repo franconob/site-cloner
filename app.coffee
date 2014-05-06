@@ -33,5 +33,5 @@ server = http.createServer app
 server.listen (app.get 'port'), ->
   console.log "Express server listening on port #{app.get 'port'}"
 
- server.on 'connection', (socket) ->
+server.on 'connection', (socket) ->
  	socket.setKeepAlive true
