@@ -13,6 +13,8 @@
             return new products.Wordpress(config, vars, subdomain, landingPage, destDir);
           case 'wordpress_001':
             return new products.Wordpress(config, vars, subdomain, landingPage, destDir);
+          case 'wordpress_blog':
+            return new products.Wordpress(config, vars, subdomain, landingPage, destDir);
           case 'joomla':
             return new products.Joomla(config, vars, subdomain, landingPage, destDir);
           case 'limesurvey':
