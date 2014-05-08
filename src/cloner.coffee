@@ -11,7 +11,7 @@ class Cloner extends EventEmitter
 
   constructor: (@vars, @config, @lp, @subdomain) ->
 
-    @dest = "#{@config.env.destDir}/#{@subdomain}.#{@config.env.domain}"
+    @dest = "#{@config.env.destDir}/#{@subdomain}#{@config.env.domain}"
     @srcDir = "#{@config.env.srcDir}/#{@lp}/htdocs"
 
     EventEmitter.call @

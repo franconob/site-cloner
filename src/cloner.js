@@ -28,7 +28,7 @@
       this.config = config;
       this.lp = lp;
       this.subdomain = subdomain;
-      this.dest = "" + this.config.env.destDir + "/" + this.subdomain + "." + this.config.env.domain;
+      this.dest = "" + this.config.env.destDir + "/" + this.subdomain + this.config.env.domain;
       this.srcDir = "" + this.config.env.srcDir + "/" + this.lp + "/htdocs";
       EventEmitter.call(this);
     }

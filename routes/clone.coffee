@@ -37,7 +37,6 @@ exports.clone = (req, res) ->
         message: err.toString()
 
 exports.catalog = (req, res) ->
-  console.log config[req.app.get 'env'].srcDir
   fs.readdir config[req.app.get 'env'].srcDir, (err, dirs) ->
     res.format
       html: ->

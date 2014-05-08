@@ -42,7 +42,6 @@
   };
 
   exports.catalog = function(req, res) {
-    console.log(config[req.app.get('env')].srcDir);
     return fs.readdir(config[req.app.get('env')].srcDir, function(err, dirs) {
       return res.format({
         html: function() {
