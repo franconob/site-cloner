@@ -28,7 +28,7 @@
       this.config = config;
       this.lp = lp;
       this.subdomain = subdomain;
-      this.dest = "" + this.config.env.destDir + "/" + this.subdomain + this.config.env.domain;
+      this.dest = "" + this.config.env.destDir + "/" + this.subdomain + this.config.env.domain + "/public_html";
       this.srcDir = "" + this.config.env.srcDir + "/" + this.lp + "/htdocs";
       EventEmitter.call(this);
     }
@@ -68,6 +68,7 @@
             return cb(err);
           }
           return fs.copy(_this.srcDir, _this.dest, function(err) {
+            console.log(_this.dest);
             if (err) {
               utils.HandleError.call(_this, err, 'copy', _this.srcDir, _this.dest);
               return;
