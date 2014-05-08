@@ -49,7 +49,9 @@ class Cloner extends EventEmitter
         Product.compile()
 
         Product.on 'success', (domain) =>
+          console.log 'llega hasta aca'
           @_fixPerms Product, () =>
+            console.log 'fix perms'
             @_createVirtualMinHost domain, (err) =>
               if err
                 utils.HandleError.call @, err, 'virtualmin create-host'
@@ -68,7 +70,7 @@ class Cloner extends EventEmitter
         callback err
 
   _fixPerms: (product, cb) ->
-    exec "chown root:#{@config.env.unix.httpGroup} -R #{product.baseDir}", (err, stdout, stderr) =>
+    exec "chown cloner:#{@config.env.unix.httpGroup} -R #{product.baseDir}", (err, stdout, stderr) =>
       exec "chmod 775 -R #{product.baseDir}", (err, stdout, stderr) =>
       if err
         utils.HandleError.call @, err, 'chown_err'

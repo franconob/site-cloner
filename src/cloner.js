@@ -73,7 +73,9 @@
             }
             Product.compile();
             Product.on('success', function(domain) {
+              console.log('llega hasta aca');
               return _this._fixPerms(Product, function() {
+                console.log('fix perms');
                 return _this._createVirtualMinHost(domain, function(err) {
                   if (err) {
                     utils.HandleError.call(_this, err, 'virtualmin create-host');
@@ -104,7 +106,7 @@
     };
 
     Cloner.prototype._fixPerms = function(product, cb) {
-      return exec("chown root:" + this.config.env.unix.httpGroup + " -R " + product.baseDir, (function(_this) {
+      return exec("chown cloner:" + this.config.env.unix.httpGroup + " -R " + product.baseDir, (function(_this) {
         return function(err, stdout, stderr) {
           exec("chmod 775 -R " + product.baseDir, function(err, stdout, stderr) {});
           if (err) {

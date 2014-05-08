@@ -23,8 +23,8 @@
         password: 'Spiralti1017'
       },
       unix: {
-        httpUser: 'www-data',
-        httpGroup: 'www-data'
+        httpUser: 'cloner',
+        httpGroup: 'cloner'
       }
     },
     products: {
