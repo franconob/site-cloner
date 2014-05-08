@@ -1,6 +1,7 @@
 Cloner = (require '../src/cloner')
 config = (require '../src/config')
 fs = require 'fs-extra'
+exec = (require 'child_process').exec
 
 exports.clone = (req, res) ->
 
@@ -27,7 +28,7 @@ exports.clone = (req, res) ->
       domain: domain
 
   cloner.on 'error', (err, type, args) ->
-    console.log err, type, args
+    exec "virtualmin delete-domain --domain #{subdomain}.#{_config['env'].domain}"
     res.json 200,
       status: 'error'
       error:
