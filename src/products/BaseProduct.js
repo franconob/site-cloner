@@ -130,7 +130,7 @@
     };
 
     BaseProduct.prototype.createDb = function(callback) {
-      return this._mysqlCmd(this.dbName, fs.realPath(this._getPath(this.destDir, BaseProduct.DBFILE)), (function(_this) {
+      return this._mysqlCmd(this.dbName, fs.realpath(this._getPath(this.destDir, BaseProduct.DBFILE)), (function(_this) {
         return function(err, stdout, stderr) {
           if (err) {
             utils.HandleError.call(_this, err, 'sourcedb', stderr);

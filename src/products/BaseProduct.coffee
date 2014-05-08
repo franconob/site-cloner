@@ -90,7 +90,7 @@ class BaseProduct extends EventEmitter
           return callback(err)
 
   createDb: (callback) ->
-    @_mysqlCmd @dbName, fs.realPath((@_getPath @destDir, BaseProduct.DBFILE)), (err, stdout, stderr) =>
+    @_mysqlCmd @dbName, fs.realpath((@_getPath @destDir, BaseProduct.DBFILE)), (err, stdout, stderr) =>
       if err
         utils.HandleError.call @, err, 'sourcedb', stderr
         return callback err
