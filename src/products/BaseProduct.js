@@ -130,24 +130,15 @@
     };
 
     BaseProduct.prototype.createDb = function(callback) {
-      var conn;
-      return callback();
-      conn = this._connect();
-      return conn.query("CREATE DATABASE " + this.dbName + " CHARACTER SET utf8 COLLATE utf8_general_ci", (function(_this) {
-        return function(err, result) {
+      return this._mysqlCmd(this.dbName, this._getPath(this.destDir, BaseProduct.DBFILE), (function(_this) {
+        return function(err, stdout, stderr) {
+          conn.end(function(err) {});
           if (err) {
-            utils.HandleError.call(_this, err, 'createdb', _this.dbName);
+            utils.HandleError.call(_this, err, 'sourcedb', stderr);
             return callback(err);
           }
-          return _this._mysqlCmd(_this.dbName, _this._getPath(_this.destDir, BaseProduct.DBFILE), function(err, stdout, stderr) {
-            if (err) {
-              utils.HandleError.call(_this, err, 'sourcedb', stderr);
-              return callback(err);
-            }
-            return conn.end(function(err) {
-              return callback();
-            });
-          });
+          return callback();
+          return "conn = @_connect()\nconn.query \"CREATE DATABASE " + _this.dbName + " CHARACTER SET utf8 COLLATE utf8_general_ci\", (err, result) =>\n  if err\n    utils.HandleError.call @, err, 'createdb', @dbName\n    return callback err\n";
         };
       })(this));
     };

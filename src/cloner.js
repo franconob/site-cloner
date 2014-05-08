@@ -61,10 +61,8 @@
       var Product, fqdn;
       Product = ClonerFactory.getCloner(this.lp, this.config, this.vars, this.subdomain, this.dest);
       fqdn = "" + this.subdomain + this.config.env.domain;
-      console.log("virtualmin create-domain --domain " + fqdn + " --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp");
       return exec("virtualmin create-domain --domain " + fqdn + " --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp", (function(_this) {
         return function(err, stdout, stderr) {
-          console.log(stdout, stderr);
           if (err) {
             utils.HandleError.call(_this, err, 'virtualmin create-host');
             return cb(err);
