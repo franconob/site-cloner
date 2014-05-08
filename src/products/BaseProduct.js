@@ -130,13 +130,14 @@
     };
 
     BaseProduct.prototype.createDb = function(callback) {
-      console.log(this.dbName, this._getPath(this.destDir, BaseProduct.DBFILE));
       return this._mysqlCmd(this.dbName, this._getPath(this.destDir, BaseProduct.DBFILE), (function(_this) {
         return function(err, stdout, stderr) {
           if (err) {
+            console.log('hay error');
             utils.HandleError.call(_this, err, 'sourcedb', stderr);
             return callback(err);
           }
+          console.log('no hay error');
           return callback();
           return "conn = @_connect()\nconn.query \"CREATE DATABASE " + _this.dbName + " CHARACTER SET utf8 COLLATE utf8_general_ci\", (err, result) =>\n  if err\n    utils.HandleError.call @, err, 'createdb', @dbName\n    return callback err\n";
         };
