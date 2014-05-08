@@ -130,7 +130,6 @@
     };
 
     BaseProduct.prototype.createDb = function(callback) {
-      console.log(this.dbName, fs.realpathSync(this._getPath(this.destDir, BaseProduct.DBFILE)));
       return this._mysqlCmd(this.dbName, fs.realpathSync(this._getPath(this.destDir, BaseProduct.DBFILE)), (function(_this) {
         return function(err, stdout, stderr) {
           if (err) {
@@ -151,7 +150,7 @@
     };
 
     BaseProduct.prototype._mysqlCmd = function(db, file, callback) {
-      return exec("mysql -u" + this.config.env.db.user + " -p" + this.config.env.db.password + " " + db + " < " + file, callback);
+      return exec("cat " + file + " | mysql -u" + this.config.env.db.user + " -p" + this.config.env.db.password + " " + db, callback);
     };
 
     BaseProduct.prototype._mysqlDump = function(db, file, callback) {
