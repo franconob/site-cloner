@@ -6,13 +6,15 @@ express = require 'express'
 routes = require './routes/clone'
 http = require 'http'
 path = require 'path'
+swig = require 'swig'
 
 app = express()
 
 # All environments
 app.set 'port', process.env.PORT or 3000
 app.set 'views', "#{__dirname}/views"
-app.set 'view engine', 'hjs'
+app.set 'view engine', 'html'
+app.engine 'html', swig.renderFile
 app.use express.favicon()
 app.use express.logger 'dev'
 app.use express.bodyParser()

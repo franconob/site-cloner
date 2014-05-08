@@ -2,8 +2,8 @@
 (function() {
   module.exports = {
     development: {
-      srcDir: '/home/fherrero/workspace/spiralti/finderit.workspace/cl.finderit.com/webs/catalog',
-      destDir: '/home/fherrero/workspace/spiralti/finderit.workspace/cl.finderit.com/webs/public',
+      srcDir: '/home/fherrero/workspace/spiralti/finderit.workspace/cloner.cl.finderit.com/webs/catalog',
+      destDir: '/home/fherrero/workspace/spiralti/finderit.workspace/cloner.cl.finderit.com/webs/public',
       domain: '.cl.finderit.local',
       db: {
         user: 'root',

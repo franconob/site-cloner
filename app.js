@@ -5,7 +5,7 @@
  */
 
 (function() {
-  var app, express, http, path, routes, server;
+  var app, express, http, path, routes, server, swig;
 
   express = require('express');
 
@@ -15,13 +15,17 @@
 
   path = require('path');
 
+  swig = require('swig');
+
   app = express();
 
   app.set('port', process.env.PORT || 3000);
 
   app.set('views', "" + __dirname + "/views");
 
-  app.set('view engine', 'hjs');
+  app.set('view engine', 'html');
+
+  app.engine('html', swig.renderFile);
 
   app.use(express.favicon());
 

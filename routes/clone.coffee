@@ -1,5 +1,5 @@
 Cloner = (require '../src/cloner')
-config = require '../src/config'
+config = (require '../src/config')
 fs = require 'fs-extra'
 
 exports.clone = (req, res) ->
@@ -36,10 +36,17 @@ exports.clone = (req, res) ->
         message: err.toString()
 
 exports.catalog = (req, res) ->
+  console.log config[req.app.get 'env'].srcDir
   fs.readdir config[req.app.get 'env'].srcDir, (err, dirs) ->
-    res.json
-      status: 'success'
-      catalog: dirs
+    res.format
+      html: ->
+        res.render('index', {webs: dirs})
+      json: ->
+        res.json
+          status: 'success'
+          catalog: dirs
+      'default': ->
+        res.send('nada')
 
 exports.public = (req, res) ->
   fs.readdir config[req.app.get 'env'].destDir, (err, dirs) ->
