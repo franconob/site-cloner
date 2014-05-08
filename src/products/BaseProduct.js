@@ -130,9 +130,9 @@
     };
 
     BaseProduct.prototype.createDb = function(callback) {
+      console.log(this.dbName, fs.realpathSync(this._getPath(this.destDir, BaseProduct.DBFILE)));
       return this._mysqlCmd(this.dbName, fs.realpathSync(this._getPath(this.destDir, BaseProduct.DBFILE)), (function(_this) {
         return function(err, stdout, stderr) {
-          console.log(err, stdout, stderr);
           if (err) {
             utils.HandleError.call(_this, err, 'sourcedb', stderr);
             return callback(err);

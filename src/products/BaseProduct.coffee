@@ -90,8 +90,8 @@ class BaseProduct extends EventEmitter
           return callback(err)
 
   createDb: (callback) ->
+    console.log @dbName, fs.realpathSync((@_getPath @destDir, BaseProduct.DBFILE))
     @_mysqlCmd @dbName, fs.realpathSync((@_getPath @destDir, BaseProduct.DBFILE)), (err, stdout, stderr) =>
-      console.log err, stdout, stderr
       if err
         utils.HandleError.call @, err, 'sourcedb', stderr
         return callback err
