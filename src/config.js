@@ -19,7 +19,7 @@
       destDir: '/home/cloner/domains',
       domain: '.cl.finderit.com',
       db: {
-        user: 'root',
+        user: 'cloner',
         password: 'Spiralti1017'
       },
       unix: {
