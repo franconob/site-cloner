@@ -14,6 +14,7 @@ class BaseProduct extends EventEmitter
     constructor: (@config, @vars, @subdomain, @landingpage, destDir) ->
 
         @vars = @vars || {}
+        @dbname = "#{@subdomain}_cl_finderit_com"
 
         @baseDir = destDir
         @destDir = @_getPath @baseDir, 'public_html'

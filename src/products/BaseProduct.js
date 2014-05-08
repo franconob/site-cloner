@@ -32,6 +32,7 @@
       this.subdomain = subdomain;
       this.landingpage = landingpage;
       this.vars = this.vars || {};
+      this.dbname = "" + this.subdomain + "_cl_finderit_com";
       this.baseDir = destDir;
       this.destDir = this._getPath(this.baseDir, 'public_html');
       this.srcDir = "" + this.config.env.srcDir + "/" + this.landingpage;
