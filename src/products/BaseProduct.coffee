@@ -16,7 +16,7 @@ class BaseProduct extends EventEmitter
         @vars = @vars || {}
 
         @baseDir = destDir
-        @destDir = @_getPath @baseDir
+        @destDir = @_getPath @baseDir, 'public_html'
 
         @srcDir = "#{@config.env.srcDir}/#{@landingpage}"
         @configFile = @config.configFile

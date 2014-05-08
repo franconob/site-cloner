@@ -33,7 +33,7 @@
       this.landingpage = landingpage;
       this.vars = this.vars || {};
       this.baseDir = destDir;
-      this.destDir = this._getPath(this.baseDir);
+      this.destDir = this._getPath(this.baseDir, 'public_html');
       this.srcDir = "" + this.config.env.srcDir + "/" + this.landingpage;
       this.configFile = this.config.configFile;
       this.fqdn = "" + this.subdomain + this.config.env.domain;
