@@ -22,7 +22,7 @@ class BaseProduct extends EventEmitter
         @configFile = @config.configFile
 
         @fqdn = "#{@subdomain}#{@config.env.domain}"
-        @dbName = "lp_#{@subdomain}"
+        @dbName = "#{@subdomain}_cl_finderit_com"
 
         @origDbName = "lp_base_#{path.basename(@srcDir)}"
 

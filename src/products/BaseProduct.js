@@ -37,7 +37,7 @@
       this.srcDir = "" + this.config.env.srcDir + "/" + this.landingpage;
       this.configFile = this.config.configFile;
       this.fqdn = "" + this.subdomain + this.config.env.domain;
-      this.dbName = "lp_" + this.subdomain;
+      this.dbName = "" + this.subdomain + "_cl_finderit_com";
       this.origDbName = "lp_base_" + (path.basename(this.srcDir));
       this.configFileVars = {
         destDir: this.destDir,
