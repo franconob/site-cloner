@@ -116,6 +116,7 @@
     };
 
     Cloner.prototype._createVirtualMinHost = function(domain, cb) {
+      console.log("virtualmin create-domain --domain " + domain + " --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp");
       return exec("virtualmin create-domain --domain " + domain + " --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp", (function(_this) {
         return function(err, stdout, stderr) {
           return cb(err);

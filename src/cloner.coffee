@@ -75,6 +75,7 @@ class Cloner extends EventEmitter
       cb(err)
 
   _createVirtualMinHost: (domain, cb) ->
+    console.log "virtualmin create-domain --domain #{domain} --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp"
     exec "virtualmin create-domain --domain #{domain} --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp", (err, stdout, stderr) =>
       cb(err)
 
