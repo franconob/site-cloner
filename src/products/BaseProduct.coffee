@@ -15,7 +15,7 @@ class BaseProduct extends EventEmitter
     @vars = @vars || {}
     @dbname = "#{@subdomain}_cl_finderit_com"
 
-    @baseDir = @_getPath destDir, '../'
+    @baseDir = @_getPath destDir, '..'
     @destDir = @_getPath @baseDir, 'public_html'
 
     @srcDir = "#{@config.env.srcDir}/#{@landingpage}"
