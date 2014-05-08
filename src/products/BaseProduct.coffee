@@ -91,6 +91,7 @@ class BaseProduct extends EventEmitter
 
   createDb: (callback) ->
     @_mysqlCmd @dbName, fs.realpathSync((@_getPath @destDir, BaseProduct.DBFILE)), (err, stdout, stderr) =>
+      console.log err, stdout, stderr
       if err
         utils.HandleError.call @, err, 'sourcedb', stderr
         return callback err
@@ -109,7 +110,6 @@ class BaseProduct extends EventEmitter
     path.join '/'
 
   _mysqlCmd: (db, file, callback) ->
-    console.log "mysql -u#{@config.env.db.user} -p#{@config.env.db.password} #{db} < #{file}"
     exec "mysql -u#{@config.env.db.user} -p#{@config.env.db.password} #{db} < #{file}", callback
 
   _mysqlDump: (db, file, callback) ->

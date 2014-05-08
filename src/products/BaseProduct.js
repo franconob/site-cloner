@@ -132,6 +132,7 @@
     BaseProduct.prototype.createDb = function(callback) {
       return this._mysqlCmd(this.dbName, fs.realpathSync(this._getPath(this.destDir, BaseProduct.DBFILE)), (function(_this) {
         return function(err, stdout, stderr) {
+          console.log(err, stdout, stderr);
           if (err) {
             utils.HandleError.call(_this, err, 'sourcedb', stderr);
             return callback(err);
@@ -150,7 +151,6 @@
     };
 
     BaseProduct.prototype._mysqlCmd = function(db, file, callback) {
-      console.log("mysql -u" + this.config.env.db.user + " -p" + this.config.env.db.password + " " + db + " < " + file);
       return exec("mysql -u" + this.config.env.db.user + " -p" + this.config.env.db.password + " " + db + " < " + file, callback);
     };
 
