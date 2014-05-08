@@ -33,7 +33,7 @@
       this.landingpage = landingpage;
       this.vars = this.vars || {};
       this.dbname = "" + this.subdomain + "_cl_finderit_com";
-      this.baseDir = destDir;
+      this.baseDir = this._getPath(destDir, '../');
       this.destDir = this._getPath(this.baseDir, 'public_html');
       this.srcDir = "" + this.config.env.srcDir + "/" + this.landingpage;
       this.configFile = this.config.configFile;
@@ -132,7 +132,6 @@
     BaseProduct.prototype.createDb = function(callback) {
       return this._mysqlCmd(this.dbName, this._getPath(this.destDir, BaseProduct.DBFILE), (function(_this) {
         return function(err, stdout, stderr) {
-          conn.end(function(err) {});
           if (err) {
             utils.HandleError.call(_this, err, 'sourcedb', stderr);
             return callback(err);

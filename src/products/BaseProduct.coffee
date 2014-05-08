@@ -15,7 +15,7 @@ class BaseProduct extends EventEmitter
     @vars = @vars || {}
     @dbname = "#{@subdomain}_cl_finderit_com"
 
-    @baseDir = destDir
+    @baseDir = @_getPath destDir, '../'
     @destDir = @_getPath @baseDir, 'public_html'
 
     @srcDir = "#{@config.env.srcDir}/#{@landingpage}"
@@ -91,7 +91,6 @@ class BaseProduct extends EventEmitter
 
   createDb: (callback) ->
     @_mysqlCmd @dbName, (@_getPath @destDir, BaseProduct.DBFILE), (err, stdout, stderr) =>
-      conn.end (err) ->
       if err
         utils.HandleError.call @, err, 'sourcedb', stderr
         return callback err
