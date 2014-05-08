@@ -51,20 +51,22 @@
               });
             }
           } else {
-            return _this.createDir();
+            return _this.createVirtualMinHost();
           }
         };
       })(this));
     };
 
-    Cloner.prototype.createDir = function() {
+    Cloner.createVirtualMinHost = function() {
       var Product;
       Product = ClonerFactory.getCloner(this.lp, this.config, this.vars, this.subdomain, this.dest);
-      return mkdirp(this.dest, (function(_this) {
-        return function(err) {
+      console.log("virtualmin create-domain --domain " + domain + " --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp");
+      return exec("virtualmin create-domain --domain " + domain + " --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp", (function(_this) {
+        return function(err, stdout, stderr) {
+          console.log(stdout, stderr);
           if (err) {
-            utils.HandleError.call(_this, err, 'mkdir', _this.dest);
-            return;
+            utils.HandleError.call(_this, err, 'virtualmin create-host');
+            return cb(err);
           }
           return fs.copy(_this.srcDir, _this.dest, function(err) {
             if (err) {
@@ -73,15 +75,8 @@
             }
             Product.compile();
             Product.on('success', function(domain) {
-              console.log('llega hasta aca');
               return _this._fixPerms(Product, function() {
-                console.log('fix perms');
-                return _this._createVirtualMinHost(domain, function(err) {
-                  if (err) {
-                    utils.HandleError.call(_this, err, 'virtualmin create-host');
-                  }
-                  return _this.emit('success', domain);
-                });
+                return _this.emit('success', domain);
               });
             });
             return Product.on('error', function(err, type, args) {
@@ -112,15 +107,6 @@
           if (err) {
             utils.HandleError.call(_this, err, 'chown_err');
           }
-          return cb(err);
-        };
-      })(this));
-    };
-
-    Cloner.prototype._createVirtualMinHost = function(domain, cb) {
-      console.log("virtualmin create-domain --domain " + domain + " --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp");
-      return exec("virtualmin create-domain --domain " + domain + " --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp", (function(_this) {
-        return function(err, stdout, stderr) {
           return cb(err);
         };
       })(this));

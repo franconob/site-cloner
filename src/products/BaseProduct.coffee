@@ -91,6 +91,7 @@ class BaseProduct extends EventEmitter
                     return callback(err)
 
     createDb: (callback) ->
+        return callback()
         conn = @_connect()
         conn.query "CREATE DATABASE #{@dbName} CHARACTER SET utf8 COLLATE utf8_general_ci", (err, result) =>
           if err

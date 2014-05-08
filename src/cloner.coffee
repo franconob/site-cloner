@@ -30,16 +30,18 @@ class Cloner extends EventEmitter
               @dropDb (err) => 
                 @createDir()
       else
-        @createDir()
+        @createVirtualMinHost()
               
 
-  createDir: () ->
+  @createVirtualMinHost: () ->
     Product = ClonerFactory.getCloner @lp, @config, @vars, @subdomain, @dest
 
-    mkdirp @dest, (err) =>
+    console.log "virtualmin create-domain --domain #{domain} --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp"
+    exec "virtualmin create-domain --domain #{domain} --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp", (err, stdout, stderr) =>
+      console.log stdout, stderr
       if err
-        utils.HandleError.call @, err, 'mkdir', @dest
-        return 
+        utils.HandleError.call @, err, 'virtualmin create-host'
+        return cb(err)
 
       fs.copy @srcDir, @dest, (err) =>
         if err
@@ -49,12 +51,7 @@ class Cloner extends EventEmitter
         Product.compile()
 
         Product.on 'success', (domain) =>
-          console.log 'llega hasta aca'
           @_fixPerms Product, () =>
-            console.log 'fix perms'
-            @_createVirtualMinHost domain, (err) =>
-              if err
-                utils.HandleError.call @, err, 'virtualmin create-host'
               @emit 'success', domain
         
         Product.on 'error', (err, type, args) =>
@@ -74,11 +71,6 @@ class Cloner extends EventEmitter
       exec "chmod 775 -R #{product.baseDir}", (err, stdout, stderr) =>
       if err
         utils.HandleError.call @, err, 'chown_err'
-      cb(err)
-
-  _createVirtualMinHost: (domain, cb) ->
-    console.log "virtualmin create-domain --domain #{domain} --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp"
-    exec "virtualmin create-domain --domain #{domain} --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp", (err, stdout, stderr) =>
       cb(err)
 
 module.exports = Cloner
