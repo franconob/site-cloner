@@ -35,9 +35,9 @@ class Cloner extends EventEmitter
 
   createVirtualMinHost: () ->
     Product = ClonerFactory.getCloner @lp, @config, @vars, @subdomain, @dest
-
-    console.log "virtualmin create-domain --domain #{domain} --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp"
-    exec "virtualmin create-domain --domain #{domain} --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp", (err, stdout, stderr) =>
+    fqdn = "#{@subdomain}#{@config.env.domain}"
+    console.log "virtualmin create-domain --domain #{fqdn} --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp"
+    exec "virtualmin create-domain --domain #{fqdn} --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp", (err, stdout, stderr) =>
       console.log stdout, stderr
       if err
         utils.HandleError.call @, err, 'virtualmin create-host'
