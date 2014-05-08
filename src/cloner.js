@@ -57,7 +57,7 @@
       })(this));
     };
 
-    Cloner.createVirtualMinHost = function() {
+    Cloner.prototype.createVirtualMinHost = function() {
       var Product;
       Product = ClonerFactory.getCloner(this.lp, this.config, this.vars, this.subdomain, this.dest);
       console.log("virtualmin create-domain --domain " + domain + " --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp");

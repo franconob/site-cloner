@@ -33,7 +33,7 @@ class Cloner extends EventEmitter
         @createVirtualMinHost()
               
 
-  @createVirtualMinHost: () ->
+  createVirtualMinHost: () ->
     Product = ClonerFactory.getCloner @lp, @config, @vars, @subdomain, @dest
 
     console.log "virtualmin create-domain --domain #{domain} --parent cloner.cl.finderit.com --web --dns --dir --mysql --ftp"
