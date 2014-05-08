@@ -130,6 +130,7 @@
     };
 
     BaseProduct.prototype.createDb = function(callback) {
+      console.log(this.dbName, this._getPath(this.destDir, BaseProduct.DBFILE));
       return this._mysqlCmd(this.dbName, this._getPath(this.destDir, BaseProduct.DBFILE), (function(_this) {
         return function(err, stdout, stderr) {
           if (err) {

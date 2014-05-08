@@ -90,6 +90,7 @@ class BaseProduct extends EventEmitter
           return callback(err)
 
   createDb: (callback) ->
+    console.log @dbName, (@_getPath @destDir, BaseProduct.DBFILE)
     @_mysqlCmd @dbName, (@_getPath @destDir, BaseProduct.DBFILE), (err, stdout, stderr) =>
       if err
         utils.HandleError.call @, err, 'sourcedb', stderr
