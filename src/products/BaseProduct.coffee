@@ -92,10 +92,8 @@ class BaseProduct extends EventEmitter
   createDb: (callback) ->
     @_mysqlCmd @dbName, (@_getPath @destDir, BaseProduct.DBFILE), (err, stdout, stderr) =>
       if err
-        console.log 'hay error'
         utils.HandleError.call @, err, 'sourcedb', stderr
         return callback err
-      console.log 'no hay error'
       return callback()
       """
         conn = @_connect()
@@ -111,6 +109,7 @@ class BaseProduct extends EventEmitter
     path.join '/'
 
   _mysqlCmd: (db, file, callback) ->
+    console.log "mysql -u#{@config.env.db.user} -p#{@config.env.db.password} #{db} < #{file}"
     exec "mysql -u#{@config.env.db.user} -p#{@config.env.db.password} #{db} < #{file}", callback
 
   _mysqlDump: (db, file, callback) ->
